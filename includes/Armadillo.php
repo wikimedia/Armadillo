@@ -10,6 +10,11 @@ class Armadillo {
 		'name' => null,
 		'location' => 'article',
 	];
+	private const DEFAULT_TAGS = [
+		'armadillo' => [
+			'module' => 'armadillo.widgets'
+		],
+	];
 
 	/**
 	 * @param Config|null $config
@@ -40,9 +45,9 @@ class Armadillo {
 		$name = $args[ 'name' ];
 		$props = [];
 		$error = false;
-		$tags = ExtensionRegistry::getInstance()->getAttribute(
+		$tags = array_merge( self::DEFAULT_TAGS, ExtensionRegistry::getInstance()->getAttribute(
 			'ArmadilloTags'
-		);
+		) );
 		$validComponent = $tags[ $name ] ?? null;
 		if ( $validComponent ) {
 			$props = [

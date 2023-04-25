@@ -29,6 +29,11 @@
 				"resources/armadillo.styles/index.less"
 			]
 		},
+		"armadillo.widgets": {
+			"packageFiles": [
+				"resources/armadillo.widgets/index.js"
+			]
+		},
 		"armadillo": {
 			"packageFiles": [
 				"resources/armadillo/index.js"
