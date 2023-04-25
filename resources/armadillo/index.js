@@ -4,7 +4,7 @@ document.querySelectorAll('armadillo').forEach(( node ) => {
     const props = JSON.parse( node.dataset.props );
     mw.loader.using( module ).then( () => {
         require( module ).armadillo(
-            node,
+            node.parentNode,
             props
         );
     })
