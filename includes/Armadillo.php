@@ -2,6 +2,7 @@
 
 namespace Armadillo;
 
+use ExtensionRegistry;
 use Html;
 
 class Armadillo {
@@ -39,27 +40,28 @@ class Armadillo {
 		$name = $args[ 'name' ];
 		$props = [];
 		$error = false;
-		switch ( $name ) {
-			case 'see-also':
-				$props = [
-					'titles' => array_values(
-						array_filter( array_map(
-							static function ( $str ) {
-								return trim( $str );
-							},
-							explode( '*', $input )
-						), static function ( $str ) {
-							return !!$str;
-						} )
-					),
-				];
-				break;
-			default:
-				return Html::warningBox( 'Unknown armadillo component' );
-				break;
+		$tags = ExtensionRegistry::getInstance()->getAttribute(
+			'ArmadilloTags'
+		);
+		$validComponent = $tags[ $name ] ?? null;
+		if ( $validComponent ) {
+			$props = [
+				'titles' => array_values(
+					array_filter( array_map(
+						static function ( $str ) {
+							return trim( $str );
+						},
+						explode( '*', $input )
+					), static function ( $str ) {
+						return !!$str;
+					} )
+				),
+			];
+		} else {
+			return Html::warningBox( 'Unknown armadillo component' );
 		}
 		$pOut = $parser->getOutput();
-		$widget = new ArmadilloWidget( $name, $props, $args['location'] );
+		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent[ 'module' ] );
 		$html = $widget->toHTML();
 		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
 		$widgets[] = $widget;
