@@ -12,7 +12,8 @@ class Armadillo {
 	];
 	private const DEFAULT_TAGS = [
 		'armadillo' => [
-			'module' => 'armadillo.widgets'
+			'module' => 'armadillo.widgets',
+			'aspect-ratio' => '799/482',
 		],
 	];
 
@@ -66,7 +67,7 @@ class Armadillo {
 			return Html::warningBox( 'Unknown armadillo component' );
 		}
 		$pOut = $parser->getOutput();
-		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent[ 'module' ] );
+		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent );
 		$html = $widget->toHTML();
 		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
 		$widgets[] = $widget;
