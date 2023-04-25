@@ -1,0 +1,47 @@
+{
+	"name": "Armadillo",
+	"author": [],
+	"url": "https://www.mediawiki.org/wiki/Extension:Armadillo",
+	"descriptionmsg": "armadillo-desc",
+	"license-name": "GPL-2.0-or-later",
+	"requires": {
+		"MediaWiki": ">= 1.40.0"
+	},
+	"ConfigRegistry": {
+		"armadillo": "GlobalVarConfig::newInstance"
+	},
+	"SpecialPages": {},
+	"APIModules": {},
+	"MessagesDirs": {
+		"armadillo": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"ArmadilloAlias": "Armadillo.alias.php"
+	},
+	"AutoloadNamespaces": {
+		"Armadillo\\": "includes/"
+	},
+	"ResourceModules": {
+		"armadillo": {
+			"packageFiles": [
+				"resources/armadillo/index.js"
+			]
+		}
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "",
+		"remoteExtPath": "Armadillo"
+	},
+	"Hooks": {
+		"BeforePageDisplay": "Armadillo\\Hooks::onBeforePageDisplay",
+		"SkinAfterPortlet": "Armadillo\\Hooks::onSkinAfterPortlet"
+	},
+	"config": {},
+	"DefaultUserOptions": {},
+	"ServiceWiringFiles": [
+		"includes/ServiceWiring.php"
+	],
+	"manifest_version": 2
+}
