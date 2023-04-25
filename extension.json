@@ -35,6 +35,7 @@
 		"remoteExtPath": "Armadillo"
 	},
 	"Hooks": {
+		"ParserFirstCallInit": "Armadillo\\Hooks::onParserFirstCallInit",
 		"BeforePageDisplay": "Armadillo\\Hooks::onBeforePageDisplay",
 		"SkinAfterPortlet": "Armadillo\\Hooks::onSkinAfterPortlet"
 	},

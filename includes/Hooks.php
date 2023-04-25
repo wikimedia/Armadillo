@@ -2,9 +2,19 @@
 namespace Armadillo;
 
 use OutputPage;
+use Parser;
 use Skin;
 
 class Hooks {
+		/**
+	 * @param Parser $parser
+	 * @return bool
+	 */
+	public static function onParserFirstCallInit( Parser $parser ) {
+		$parser->setHook( 'armadillo', [ Armadillo::class, 'parserHook' ] );
+		return true;
+	}
+
 	/**
 	 * BeforePageDisplay hook handler
 	 * @see https://www.mediawiki.org/wiki/Manual:Hooks/SkinAfterPortlet
