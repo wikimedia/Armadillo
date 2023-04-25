@@ -41,6 +41,7 @@
 	},
 	"Hooks": {
 		"ParserFirstCallInit": "Armadillo\\Hooks::onParserFirstCallInit",
+		"OutputPageParserOutput": "Armadillo\\Hooks::onOutputPageParserOutput",
 		"BeforePageDisplay": "Armadillo\\Hooks::onBeforePageDisplay",
 		"SkinAfterPortlet": "Armadillo\\Hooks::onSkinAfterPortlet"
 	},

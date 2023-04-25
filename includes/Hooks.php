@@ -3,6 +3,7 @@ namespace Armadillo;
 
 use OutputPage;
 use Parser;
+use ParserOutput;
 use Skin;
 
 class Hooks {
@@ -25,6 +26,28 @@ class Hooks {
 	 */
 	public static function onSkinAfterPortlet( $skin, $portletName, &$html ) {
 		// @todo: can add widgets to the right rail.
+		$widgets = array_filter( $skin->getOutput()->getProperty( 'armadillo' ) ?? [], static function ( ArmadilloWidget $widget ) use ( $portletName ) {
+			$location = $widget->location;
+			return $location === $portletName;
+		} );
+		if ( count( $widgets ) ) {
+			foreach ( $widgets as $widget ) {
+				$html .= $widget->toHTML( $widget );
+			}
+		}
+
+	}
+
+	/**
+	 * OutputPageParserOutput hook handler
+	 * @param OutputPage $outputPage
+	 * @param ParserOutput $parserOutput ParserOutput instance being added in $outputPage
+	 */
+	public static function onOutputPageParserOutput(
+		OutputPage $outputPage, ParserOutput $parserOutput
+	): void {
+		$armadillo = $parserOutput->getExtensionData( 'armadillo' );
+		$outputPage->setProperty( 'armadillo', $armadillo );
 	}
 
 	/**

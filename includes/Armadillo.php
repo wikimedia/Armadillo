@@ -7,6 +7,7 @@ use Html;
 class Armadillo {
 	private const DEFAULT_ARGS = [
 		'name' => null,
+		'location' => 'article',
 	];
 
 	/**
@@ -29,44 +30,40 @@ class Armadillo {
 	}
 
 	/**
-	 * Render hieroglyph text
-	 *
+	 * Render widget
 	 * @param string $input
 	 * @return string converted code
 	 */
 	public function render( $input, $args, $parser ) {
 		$args = array_merge( self::DEFAULT_ARGS, $args );
 		$name = $args[ 'name' ];
-		$html = Html::openElement( 'div', [
-			'class' => 'armadillo-widget',
-		] );
-		$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
+		$props = [];
+		$error = false;
 		switch ( $name ) {
 			case 'see-also':
-				$html .= Html::rawElement(
-					'armadillo:see-also',
-					[
-						'data-props' => json_encode( [
-							'titles' => array_values(
-								array_filter( array_map(
-									static function ( $str ) {
-										return trim( $str );
-									},
-									explode( '*', $input )
-								), static function ( $str ) {
-									return !!$str;
-								} )
-							),
-						] ),
-					],
-					$fallback
-				);
+				$props = [
+					'titles' => array_values(
+						array_filter( array_map(
+							static function ( $str ) {
+								return trim( $str );
+							},
+							explode( '*', $input )
+						), static function ( $str ) {
+							return !!$str;
+						} )
+					),
+				];
 				break;
 			default:
-				$html .= Html::warningBox( 'Unknown armadillo component' );
+				return Html::warningBox( 'Unknown armadillo component' );
 				break;
 		}
-		$html .= Html::closeElement( 'div' );
+		$pOut = $parser->getOutput();
+		$widget = new ArmadilloWidget( $name, $props, $args['location'] );
+		$html = $widget->toHTML();
+		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
+		$widgets[] = $widget;
+		$widgets = $pOut->setExtensionData( 'armadillo', $widgets );
 		return $html;
 	}
 }
