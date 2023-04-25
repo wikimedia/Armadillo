@@ -24,6 +24,11 @@
 		"Armadillo\\": "includes/"
 	},
 	"ResourceModules": {
+		"armadillo.styles": {
+			"styles": [
+				"resources/armadillo.styles/index.less"
+			]
+		},
 		"armadillo": {
 			"packageFiles": [
 				"resources/armadillo/index.js"

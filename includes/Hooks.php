@@ -36,5 +36,6 @@ class Hooks {
 	 */
 	public static function onBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
 		$out->addModules( 'armadillo' );
+		$out->addModuleStyles( 'armadillo.styles' );
 	}
 }

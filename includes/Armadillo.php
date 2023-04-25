@@ -1,32 +1,14 @@
 <?php
-/**
- * WikiHiero - A PHP convert from text using "Manual for the encoding of
- * hieroglyphic texts for computer input" syntax to HTML entities (table and
- * images).
- *
- * Copyright (C) 2004 Guillaume Blanchard (Aoineko)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- * http://www.gnu.org/copyleft/gpl.html
- */
 
 namespace Armadillo;
 
 use Html;
 
 class Armadillo {
+	private const DEFAULT_ARGS = [
+		'name' => null,
+	];
+
 	/**
 	 * @param Config|null $config
 	 * @throws MWException
@@ -43,21 +25,48 @@ class Armadillo {
 	 */
 	public static function parserHook( $input, $args, $parser ) {
 		$widget = new Armadillo();
-		return $widget->render( $input );
+		return $widget->render( $input, $args, $parser );
 	}
-
 
 	/**
 	 * Render hieroglyph text
 	 *
-	 * @param string $text text to convert
+	 * @param string $input
 	 * @return string converted code
 	 */
-	public function render( $text ) {
-		return Html::rawElement(
-			'div',
-			[],
-			'hello world'
-		);
+	public function render( $input, $args, $parser ) {
+		$args = array_merge( self::DEFAULT_ARGS, $args );
+		$name = $args[ 'name' ];
+		$html = Html::openElement( 'div', [
+			'class' => 'armadillo-widget',
+		] );
+		$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
+		switch ( $name ) {
+			case 'see-also':
+				$html .= Html::rawElement(
+					'armadillo:see-also',
+					[
+						'data-props' => json_encode( [
+							'titles' => array_values(
+								array_filter( array_map(
+									static function ( $str ) {
+										return trim( $str );
+									},
+									explode( '*', $input )
+								), static function ( $str ) {
+									return !!$str;
+								} )
+							),
+						] ),
+					],
+					$fallback
+				);
+				break;
+			default:
+				$html .= Html::warningBox( 'Unknown armadillo component' );
+				break;
+		}
+		$html .= Html::closeElement( 'div' );
+		return $html;
 	}
 }
