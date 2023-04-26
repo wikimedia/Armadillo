@@ -34,11 +34,11 @@ async function buildTFA() {
 };
 
 async function tfa( el ) {
-    el.appendChild( await buildTFA() );
+	el.appendChild( await buildTFA() );
 }
 
 function quote( el, props ) {
-    el.textContent = props.text;
+	el.textContent = props.text;
 }
 
 function armadillo( el ) {
@@ -46,18 +46,18 @@ function armadillo( el ) {
 }
 
 module.exports = {
-    armadillo: function ( el, props, name ) {
-        switch ( name ) {
-            case 'quote':
-                quote( el, props );
-                break;
+	armadillo: function ( el, props, name ) {
+		switch ( name ) {
+			case 'quote':
+				quote( el, props );
+				break;
 			case 'tfa':
 				tfa( el );
 				break;
-            default:
-               	armadillo( el );
-                break;
-        }
-        return Promise.resolve();
-    }
+			default:
+				armadillo( el );
+				break;
+		}
+		return Promise.resolve();
+	}
 }
