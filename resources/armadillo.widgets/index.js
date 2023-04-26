@@ -38,7 +38,7 @@ async function tfa( el ) {
 }
 
 function quote( el, props ) {
-	el.textContent = props.text;
+    el.innerHTML = props.html;
 }
 
 function armadillo( el ) {

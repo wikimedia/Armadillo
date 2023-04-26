@@ -17,8 +17,9 @@ class Armadillo {
 			'aspect-ratio' => '300/300',
 		],
 		'quote' => [
+			'callback' => 'Armadillo\Armadillo::renderQuoteCallback',
 			'module' => 'armadillo.widgets',
-			'aspect-ratio' => '300/300',
+			'aspect-ratio' => '400/200',
 		],
 		'armadillo' => [
 			'module' => 'armadillo.widgets',
@@ -65,8 +66,10 @@ class Armadillo {
 			$customArgs = $args;
 			unset( $customArgs['location'] );
 			unset( $customArgs['name'] );
+			$childParser = $parser->getFreshParser();
 
 			$props = array_merge( $customArgs, [
+				'html' => $parser->recursiveTagParseFully( $input ),
 				'text' => $input,
 				'titles' => array_values(
 					array_filter( array_map(
@@ -94,5 +97,9 @@ class Armadillo {
 			$html = $widget->toHTML();
 			return $html;
 		}
+	}
+
+	public static function renderQuoteCallback( array $props ) {
+		return $props['html'];
 	}
 }

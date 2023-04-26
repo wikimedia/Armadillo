@@ -40,11 +40,18 @@ class ArmadilloWidget {
 		} else {
 			$maxHeight = '';
 		}
+		$callback = $this->moduleProps[ 'callback' ] ?? null;
+		$class = 'armadillo-widget';
+		if ( $callback ) {
+			$fallback = call_user_func( $callback, $props );
+			$class .= 'armadillo-widget-loaded';
+		} else {
+			$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
+		}
 		$html = Html::openElement( 'div', [
-			'class' => 'armadillo-widget',
+			'class' => $class,
 			'style' => 'aspect-ratio:' . $aRatio . ';' . $maxHeight,
 		] );
-		$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
 		$html .= Html::rawElement(
 			'armadillo',
 			[
