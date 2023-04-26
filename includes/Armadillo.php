@@ -53,8 +53,12 @@ class Armadillo {
 		) );
 		$validComponent = $tags[ $name ] ?? null;
 		if ( $validComponent ) {
-			$props = [
-				'title' => $args[ 'title' ] ?? '',
+			// All other args are passed to component.
+			$customArgs = $args;
+			unset( $customArgs['location'] );
+			unset( $customArgs['name'] );
+
+			$props = array_merge( $customArgs, [
 				'titles' => array_values(
 					array_filter( array_map(
 						static function ( $str ) {
@@ -65,7 +69,7 @@ class Armadillo {
 						return !!$str;
 					} )
 				),
-			];
+			] );
 		} else {
 			return Html::warningBox( 'Unknown armadillo component' );
 		}
