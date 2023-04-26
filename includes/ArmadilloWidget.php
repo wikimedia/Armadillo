@@ -44,7 +44,7 @@ class ArmadilloWidget {
 		$class = 'armadillo-widget';
 		if ( $callback ) {
 			$fallback = call_user_func( $callback, $props );
-			$class .= 'armadillo-widget-loaded';
+			$class .= ' armadillo-widget-loaded';
 		} else {
 			$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
 		}
