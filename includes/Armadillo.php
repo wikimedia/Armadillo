@@ -6,9 +6,10 @@ use ExtensionRegistry;
 use Html;
 
 class Armadillo {
+	private const LOCATION_ARTICLE = 'article';
 	private const DEFAULT_ARGS = [
 		'name' => null,
-		'location' => 'article',
+		'location' => self::LOCATION_ARTICLE
 	];
 	private const DEFAULT_TAGS = [
 		'armadillo' => [
@@ -44,6 +45,7 @@ class Armadillo {
 	public function render( $input, $args, $parser ) {
 		$args = array_merge( self::DEFAULT_ARGS, $args );
 		$name = $args[ 'name' ];
+		$location = $args[ 'location' ];
 		$props = [];
 		$error = false;
 		$tags = array_merge( self::DEFAULT_TAGS, ExtensionRegistry::getInstance()->getAttribute(
@@ -69,6 +71,10 @@ class Armadillo {
 		}
 		$pOut = $parser->getOutput();
 		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent );
+		if ( $location !== self::LOCATION_ARTICLE ) {
+			// this content is not displayed in article.
+			return '';
+		}
 		$html = $widget->toHTML();
 		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
 		$widgets[] = $widget;
