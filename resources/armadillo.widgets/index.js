@@ -1,11 +1,18 @@
-async function fetchTFA() {
-	const currentTime = new Date();
-	const currentDD = String(currentTime.getDate()).padStart(2, '0');
-	const currentMM = String(currentTime.getMonth() + 1).padStart(2, '0');
-	const currentYYYY = currentTime.getFullYear();
+function getDate( offset = 0 ) {
+	var date = new Date();
+	date.setDate( date.getDate() + offset );
+	const DD = String(date.getDate()).padStart(2, '0');
+	const MM = String(date.getMonth() + 1).padStart(2, '0');
+	const YYYY = date.getFullYear();
+	return [ YYYY, MM, DD ];
+}
+
+async function fetchTFA( offset = 0 ) {
+	const date = getDate( offset );
 	const baseApiUrl = 'https://en.wikipedia.org/api/rest_v1/feed/featured';
 	try {
-		const response = await fetch( `${baseApiUrl}/${currentYYYY}/${currentMM}/${currentDD}` );
+		console.log(`${baseApiUrl}/${date[0]}/${date[1]}/${date[2]}`)
+		const response = await fetch( `${baseApiUrl}/${date[0]}/${date[1]}/${date[2]}` );
 		const jsonData = await response.json();
 		return jsonData.tfa;
 	} catch ( error ) {
@@ -14,11 +21,10 @@ async function fetchTFA() {
 	}
 };
 
-async function buildTFA() {
-	const tfa = await fetchTFA();
-	const tfaTemplateString = `
-		<div class="MainPageBG mp-box">
-			<h2 class="mp-h2"><span id="From_today.27s_featured_article"></span><span class="mw-headline" id="From_today's_featured_article">From today's featured article</span></h2>
+async function buildTFA( offset = 0 ) {
+	const tfa = await fetchTFA( offset );
+	const tfaTemplate = `
+		<div id="tfa" class="MainPageBG mp-box">
 			<div style="float: left; margin: 0.5em 0.9em 0.4em 0em;">
 				<div class="thumbinner mp-thumb" style="background: transparent; border: none; padding: 0; max-width: 140px;">
 					<a class="image" title=${tfa.titles.normalized}">
@@ -30,11 +36,28 @@ async function buildTFA() {
 			${tfa.extract_html}
 		</div>
 	`;
-	return document.createRange().createContextualFragment( tfaTemplateString );
+	return document.createRange().createContextualFragment( tfaTemplate );
 };
 
 async function tfa( el ) {
 	el.appendChild( await buildTFA() );
+	const tfaButtonTemplate = `
+		<div style="clear: both">
+			<button id="previous-tfa" class="mw-ui-button"> Previous featured article </button>
+			<button id="next-tfa" class="mw-ui-button"> Next featured article </button>
+		</div>
+	`;
+	const buttonElements = document.createRange().createContextualFragment( tfaButtonTemplate );
+	el.appendChild( buttonElements );
+	document.getElementById('previous-tfa').addEventListener( 'click', async function ( ) {
+		const oldTFA = document.getElementById( 'tfa' );
+		oldTFA.parentElement.replaceChild( await buildTFA( -1 ), oldTFA );
+	} );
+	document.getElementById('next-tfa').addEventListener( 'click', async function ( ) {
+		const oldTFA = document.getElementById( 'tfa' );
+		console.log(oldTFA);
+		oldTFA.parentElement.replaceChild( await buildTFA( 1 ), oldTFA );
+	} );
 }
 
 function quote( el, props ) {
