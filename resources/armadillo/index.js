@@ -6,7 +6,8 @@ document.querySelectorAll('armadillo').forEach(( node ) => {
     mw.loader.using( module ).then( () => {
         require( module ).armadillo(
             container,
-            props
+            props,
+            node.dataset.name
         ).then(() => {
             container.classList.add( 'armadillo-widget-loaded' );
         })

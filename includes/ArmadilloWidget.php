@@ -43,6 +43,7 @@ class ArmadilloWidget {
 		$html .= Html::rawElement(
 			'armadillo',
 			[
+				'data-name' => $this->name,
 				'data-module' => $moduleProps[ 'module' ],
 				'data-props' => json_encode( $props ),
 			],

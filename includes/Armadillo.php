@@ -12,6 +12,10 @@ class Armadillo {
 		'location' => self::LOCATION_ARTICLE
 	];
 	private const DEFAULT_TAGS = [
+		'quote' => [
+			'module' => 'armadillo.widgets',
+			'aspect-ratio' => '300/300',
+		],
 		'armadillo' => [
 			'module' => 'armadillo.widgets',
 			'aspect-ratio' => '799/482',
@@ -59,6 +63,7 @@ class Armadillo {
 			unset( $customArgs['name'] );
 
 			$props = array_merge( $customArgs, [
+				'text' => $input,
 				'titles' => array_values(
 					array_filter( array_map(
 						static function ( $str ) {
