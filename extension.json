@@ -30,8 +30,12 @@
 			]
 		},
 		"armadillo.widgets": {
+			"styles": [
+				"resources/armadillo.widgets/index.less"
+			],
 			"packageFiles": [
-				"resources/armadillo.widgets/index.js"
+				"resources/armadillo.widgets/index.js",
+				"resources/armadillo.widgets/randomQuote.js"
 			]
 		},
 		"armadillo": {

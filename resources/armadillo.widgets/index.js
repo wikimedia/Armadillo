@@ -1,3 +1,4 @@
+const randomQuote = require( './randomQuote.js' );
 let tfaDateOffset = 0;
 function changeOffset( val ) {
 	tfaDateOffset += val;
@@ -66,8 +67,29 @@ async function tfa( el ) {
 	} );
 }
 
-function quote( el, props ) {
-    el.innerHTML = props.html;
+function quoteBox( el, props ) {
+    el.innerHTML = `<div class="armadillo-quotebox"><div class="armadillo-quote">${props.html}</div>
+<div class="mw-ui-button">Show me another</div>
+</div>`;
+	el.querySelector( '.mw-ui-button').addEventListener( 'click', function () {
+		el.classList.remove( 'armadillo-widget-loaded' );
+		randomQuote( props.sources || [
+			"Mahatma Gandhi",
+			"Albert Einstein",
+			"Martin Luther King, Jr.",
+			"Leonardo da Vinci",
+			"Walt Disney",
+			"Edgar Allan Poe",
+			"Sigmund Freud",
+			"Thomas A. Edison",
+			"Robin Williams",
+			"Andy Warhol",
+			"Steve Jobs"
+		] ).then( ( quote ) => {
+			el.querySelector( '.armadillo-quote' ).innerHTML = `<blockquote>${quote.text}</blockquote><p>~ <a href="${quote.authorUrl}">${quote.author}</a></p>`
+			el.classList.add( 'armadillo-widget-loaded' );
+		} );
+	})
 }
 
 function armadillo( el ) {
@@ -78,7 +100,7 @@ module.exports = {
 	armadillo: function ( el, props, name ) {
 		switch ( name ) {
 			case 'quote':
-				quote( el, props );
+				quoteBox( el, props );
 				break;
 			case 'tfa':
 				tfa( el );
