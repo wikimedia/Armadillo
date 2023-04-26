@@ -12,6 +12,10 @@ class Armadillo {
 		'location' => self::LOCATION_ARTICLE
 	];
 	private const DEFAULT_TAGS = [
+		'tfa' => [
+			'module' => 'armadillo.widgets',
+			'aspect-ratio' => '300/300',
+		],
 		'quote' => [
 			'module' => 'armadillo.widgets',
 			'aspect-ratio' => '300/300',

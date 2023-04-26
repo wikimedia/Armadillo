@@ -34,10 +34,15 @@ class ArmadilloWidget {
 		$parts = explode( '/', $aRatio );
 		$props = $this->props;
 		$numTitles = count( $props['titles'] );
-		$height = (int)trim( $parts[1] ) * $numTitles;
+		if ( $numTitles > 0 ) {
+			$height = (int)trim( $parts[1] ) * $numTitles;
+			$maxHeight = 'max-height:' . $height . 'px;';
+		} else {
+			$maxHeight = '';
+		}
 		$html = Html::openElement( 'div', [
 			'class' => 'armadillo-widget',
-			'style' => 'aspect-ratio:' . $aRatio . '; max-height:' . $height . 'px;',
+			'style' => 'aspect-ratio:' . $aRatio . ';' . $maxHeight,
 		] );
 		$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
 		$html .= Html::rawElement(
