@@ -30,16 +30,21 @@ class ArmadilloWidget {
 		$moduleProps = $this->moduleProps + [
 			'aspect-ratio' => '1/1'
 		];
+		$aRatio = $moduleProps[ 'aspect-ratio' ];
+		$parts = explode( '/', $aRatio );
+		$props = $this->props;
+		$numTitles = count( $props['titles'] );
+		$height = (int)trim( $parts[1] ) * $numTitles;
 		$html = Html::openElement( 'div', [
 			'class' => 'armadillo-widget',
-			'style' => 'aspect-ratio:' . $moduleProps[ 'aspect-ratio' ],
+			'style' => 'aspect-ratio:' . $aRatio . '; max-height:' . $height . 'px;',
 		] );
 		$fallback = Html::element( 'noscript', [], 'JavaScript required to see this content' );
 		$html .= Html::rawElement(
 			'armadillo',
 			[
 				'data-module' => $moduleProps[ 'module' ],
-				'data-props' => json_encode( $this->props ),
+				'data-props' => json_encode( $props ),
 			],
 			$fallback
 		);
