@@ -52,6 +52,7 @@ class Armadillo {
 		$validComponent = $tags[ $name ] ?? null;
 		if ( $validComponent ) {
 			$props = [
+				'title' => $args[ 'title' ] ?? '',
 				'titles' => array_values(
 					array_filter( array_map(
 						static function ( $str ) {
