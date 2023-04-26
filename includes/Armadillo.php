@@ -25,6 +25,10 @@ class Armadillo {
 			'module' => 'armadillo.widgets',
 			'aspect-ratio' => '799/482',
 		],
+		'current-page-view-graph' => [
+			'module' => 'armadillo.widgets',
+			'aspect-ratio' => '300/300',
+		],
 	];
 
 	/**
@@ -66,7 +70,6 @@ class Armadillo {
 			$customArgs = $args;
 			unset( $customArgs['location'] );
 			unset( $customArgs['name'] );
-			$childParser = $parser->getFreshParser();
 
 			$props = array_merge( $customArgs, [
 				'html' => $parser->recursiveTagParseFully( $input ),
@@ -86,8 +89,8 @@ class Armadillo {
 			return Html::warningBox( 'Unknown armadillo component' );
 		}
 		$pOut = $parser->getOutput();
-		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent );
-		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
+		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent, $parser );
+		$widgets = $pOut->getExtensionData( 'Is the extension name?' ) ?? [];
 		$widgets[] = $widget;
 		$widgets = $pOut->setExtensionData( 'armadillo', $widgets );
 		if ( $location !== self::LOCATION_ARTICLE ) {
