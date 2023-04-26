@@ -71,14 +71,15 @@ class Armadillo {
 		}
 		$pOut = $parser->getOutput();
 		$widget = new ArmadilloWidget( $name, $props, $args['location'], $validComponent );
-		if ( $location !== self::LOCATION_ARTICLE ) {
-			// this content is not displayed in article.
-			return '';
-		}
-		$html = $widget->toHTML();
 		$widgets = $pOut->getExtensionData( 'armadillo' ) ?? [];
 		$widgets[] = $widget;
 		$widgets = $pOut->setExtensionData( 'armadillo', $widgets );
-		return $html;
+		if ( $location !== self::LOCATION_ARTICLE ) {
+			// this content is not displayed in article.
+			return '';
+		} else {
+			$html = $widget->toHTML();
+			return $html;
+		}
 	}
 }
