@@ -1,14 +1,19 @@
-function getDate( offset = 0 ) {
+let tfaDateOffset = 0;
+function changeOffset( val ) {
+	tfaDateOffset += val;
+}
+
+function getDate() {
 	var date = new Date();
-	date.setDate( date.getDate() + offset );
+	date.setDate( date.getDate() + tfaDateOffset );
 	const DD = String(date.getDate()).padStart(2, '0');
 	const MM = String(date.getMonth() + 1).padStart(2, '0');
 	const YYYY = date.getFullYear();
 	return [ YYYY, MM, DD ];
 }
 
-async function fetchTFA( offset = 0 ) {
-	const date = getDate( offset );
+async function fetchTFA() {
+	const date = getDate();
 	const baseApiUrl = 'https://en.wikipedia.org/api/rest_v1/feed/featured';
 	try {
 		console.log(`${baseApiUrl}/${date[0]}/${date[1]}/${date[2]}`)
@@ -21,8 +26,8 @@ async function fetchTFA( offset = 0 ) {
 	}
 };
 
-async function buildTFA( offset = 0 ) {
-	const tfa = await fetchTFA( offset );
+async function buildTFA() {
+	const tfa = await fetchTFA();
 	const tfaTemplate = `
 		<div id="tfa" class="MainPageBG mp-box">
 			<div style="float: left; margin: 0.5em 0.9em 0.4em 0em;">
@@ -51,12 +56,13 @@ async function tfa( el ) {
 	el.appendChild( buttonElements );
 	document.getElementById('previous-tfa').addEventListener( 'click', async function ( ) {
 		const oldTFA = document.getElementById( 'tfa' );
-		oldTFA.parentElement.replaceChild( await buildTFA( -1 ), oldTFA );
+		changeOffset( -1 );
+		oldTFA.parentElement.replaceChild( await buildTFA(), oldTFA );
 	} );
 	document.getElementById('next-tfa').addEventListener( 'click', async function ( ) {
 		const oldTFA = document.getElementById( 'tfa' );
-		console.log(oldTFA);
-		oldTFA.parentElement.replaceChild( await buildTFA( 1 ), oldTFA );
+		changeOffset( 1 );
+		oldTFA.parentElement.replaceChild( await buildTFA(), oldTFA );
 	} );
 }
 
